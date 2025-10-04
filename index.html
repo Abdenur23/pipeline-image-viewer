@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pipeline Live Images</title>
+  <style>
+    body { font-family: sans-serif; background: #f8f9fa; padding: 20px; }
+    #images img { width: 200px; margin: 10px; border-radius: 10px; box-shadow: 0 0 8px #ccc; }
+  </style>
+</head>
+<body>
+  <h2>Live Image Feed</h2>
+  <input id="cid" placeholder="Enter Customer ID" />
+  <button id="startBtn">Start Watching</button>
+  <div id="images"></div>
+
+  <script>
+    let seen = new Set();
+    document.getElementById('startBtn').onclick = () => {
+      const cid = document.getElementById('cid').value.trim();
+      if (!cid) return alert("Enter CID first");
+
+      const API = "https://YOUR_API_GATEWAY_URL"; // replace this line below
+      const endpoint = `${API}?cid=${cid}`;
+
+      setInterval(async () => {
+        const res = await fetch(endpoint);
+        const data = await res.json();
+        data.forEach(img => {
+          if (!seen.has(img.key)) {
+            seen.add(img.key);
+            const el = document.createElement("img");
+            el.src = img.url;
+            document.getElementById("images").appendChild(el);
+          }
+        });
+      }, 3000); // every 3 seconds
+    };
+  </script>
+</body>
+</html>
