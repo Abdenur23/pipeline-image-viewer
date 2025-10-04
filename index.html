@@ -21,7 +21,7 @@
       const cid = document.getElementById('cid').value.trim();
       if (!cid) return alert("Enter CID first");
 
-      const API = "https://YOUR_API_GATEWAY_URL"; // replace this line below
+      const API = "https://yd39bjpga9.execute-api.us-east-1.amazonaws.com/default/listImagesByCID"; // replace this line below
       const endpoint = `${API}?cid=${cid}`;
 
       setInterval(async () => {
