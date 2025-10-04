@@ -26,7 +26,18 @@
 
       setInterval(async () => {
         const res = await fetch(endpoint);
-        const data = await res.json();
+        const result = await res.json();
+        const data = typeof result === "string"
+          ? JSON.parse(result)
+          : result.body
+          ? JSON.parse(result.body)
+          : result;
+        
+        if (!Array.isArray(data)) {
+          console.error("Unexpected API response:", data);
+          return;
+        }
+        
         data.forEach(img => {
           if (!seen.has(img.key)) {
             seen.add(img.key);
@@ -35,6 +46,7 @@
             document.getElementById("images").appendChild(el);
           }
         });
+
       }, 3000); // every 3 seconds
     };
   </script>
